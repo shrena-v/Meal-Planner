@@ -1,0 +1,252 @@
+ <html> <head>
+    <title> student meal planner </title>
+    <style>
+        body{
+            font-family: Arial, Times New Roman, sans-serif;
+            background: linear-gradient(135deg, #f6d9fd, #e0f7fa);
+            padding: 50px;
+            color: #4d2c2c;
+        }
+        h1{
+            color: #9a0102;
+          
+        }
+        label {
+               display: block;
+               margin: 10px 7px 5px;
+        }
+        select,input,button{
+          border-radius: 12px;
+          border: none;
+            padding: 9px;
+            width: 230px;
+            margin-bottom: 7px;
+        }
+        p{
+            font-style: oblique;
+            font-weight:500;
+            font-family:Arial;
+        }
+        button{
+            background: #ff77a9;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px;
+            width: 250px;
+        }
+        button:hover{
+            background: #ff4d85;
+            transform: scale(1.05);
+        
+        }
+        #result{
+      margin: 30px auto; /*align horixontally center*/
+      padding: 15px;
+      background: #fff;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+      width: 500px;
+    }
+ .container {
+  width: 100%;
+  max-width: 1500px;  /*limits width of the content*/
+  text-align: center; /* centers text inside */
+  
+}
+
+    </style>
+    </head>
+    <body>
+        <div class="container">
+        <h1> Cheap Student Meal Planner </h1>
+
+        <p> always remember to drink waterrr!!! </p>
+
+        <label for="Budget"> Enter your budget here </label>
+        <input type="number" id="budget" placeholder="eg 100"> 
+
+        <label for="preference"> Choose your preference </label> 
+        <select id="preference">
+            <option value="veg"> Veg </option>
+            <option value="non veg"> Non Veg </option>
+        </select> 
+
+        <label for="mealtype"> Choose your meal type </label>
+        <select id="mealtype">
+            <option value="breakfast">Breakfast</option>
+            <option value="lunch">Lunch</option>
+            <option value="snacks">Snack</option>
+            <option value="dinner"> Dinner</option>
+        </select> <br><br>
+        <button onclick="planMeal()">Generate Meal Plan</button>
+    <div id="result"></div> </div></div>
+    <script>
+        const meals = {
+  breakfast:[
+
+    {
+    id: 1,
+    name: "Chiura with Anda Tarkari",
+    ingredients: ["Chiura", "Egg curry", "Achar"],
+    cost: 50,
+    type: "non veg",
+    calories: 350
+  },
+  {
+    id: 2,
+    name: "Aloo Paratha (2 pcs)",
+    ingredients: ["Flour", "Potato", "Oil", "Salt"],
+    cost: 40,
+    type: "veg",
+    calories: 300
+  },
+  {
+    id: 3,
+    name: "Dal Bhat (Mini plate)",
+    ingredients: ["Rice", "Dal", "Tarkari", "Achar"],
+    cost: 80,
+    type: "veg",
+    calories: 500
+  },
+  {
+    id: 4,
+    name: "Chana Tarkari with Puri (2 pcs)",
+    ingredients: ["Chickpeas", "Flour", "Oil", "Spices"],
+    cost: 45,
+    type: "veg",
+    calories: 320
+  }
+
+],
+lunch:[
+  {
+    id: 5,
+    name: "Veg Chowmein",
+    ingredients: ["Noodles", "Vegetables", "Soy Sauce","Spices"],
+    cost: 60,
+    type: "veg",
+    calories: 400
+  },
+  {
+    id: 6,
+    name: "Anda Chowmein",
+    ingredients: ["Noodles", "Egg", "Soy Sauce", "Vegetables"],
+    cost: 70,
+    type: "non veg",
+    calories: 450
+  },
+  {
+    id: 7,
+    name: "Dal Bhat (Mini plate)",
+    ingredients: ["Rice", "Dal", "Tarkari", "Achar"],
+    cost: 80,
+    type: "veg",
+    calories: 500
+  },
+  {
+    id: 8,
+    name: "Fried Rice with Egg",
+    ingredients: ["Rice", "Egg", "Vegetables"],
+    cost: 70,
+    type: "non veg",
+    calories: 450
+  },
+  {
+    id: 9,
+    name: "Veg Momo (Half plate)",
+    ingredients: ["Flour", "Vegetables", "Spices"],
+    cost: 50,
+    type: "veg",
+    calories: 200
+  },
+  {
+    id: 10,
+    name: "Chana Tarkari with Puri (2 pcs)",
+    ingredients: ["Chickpeas", "Flour", "Oil", "Spices"],
+    cost: 45,
+    type: "veg",
+    calories: 320
+  }
+],
+snacks : [
+  {
+    id: 11,
+    name: "Wai Wai Sadeko",
+    ingredients: ["Wai Wai noodles", "Onion", "Chili", "Spices"],
+    cost: 35,
+    type: "veg",
+    calories: 200
+  },
+  {
+    id: 12,
+    name: "Chiya + Biscuit",
+    ingredients: ["Tea leaves", "Milk", "Sugar", "Biscuits"],
+    cost: 30,
+    type: "veg",
+    calories: 150
+  }
+],
+dinner : [
+    {
+    id: 13,
+    name: "Fried Rice with Egg",
+    ingredients: ["Rice", "Egg", "Vegetables"],
+    cost: 70,
+    type: "non veg",
+    calories: 450
+  },
+  {
+    id: 14,
+    name: "Dal Bhat (Mini plate)",
+    ingredients: ["Rice", "Dal", "Tarkari", "Achar"],
+    cost: 80,
+    type: "veg",
+    calories: 500
+  },
+]
+};
+        function getRandomMeal(type,preference,budget){
+            let options=meals[type]
+            if (preference==="veg"){
+                options=options.filter(meal=>meal.type==="veg")
+            }
+            else if (preference==="non veg") {
+                options=options.filter(meal=>meal.type==="non veg")
+            }
+            if(budget){ //checks if the userr has entered a budget
+                options=options.filter(meal=>meal.cost<=budget)
+            }
+            if (options.length===0){
+                return null;
+            }
+        else{
+             return options[Math.floor(Math.random()*options.length)] //math.random gives a random deciman between 0 and 1 and it multiplies with options length then math.floor rounds to the nearest whole number
+    }
+            } 
+             function planMeal(){
+                const budget=parseInt(document.getElementById("budget").value); //parseint converts string into number
+                const preference=document.getElementById("preference").value;
+                const type=document.getElementById("mealtype").value;
+                const meal=getRandomMeal(type,preference,budget);
+                const result=document.getElementById("result");
+             if(!meal){
+                result.innerHTML=`no ${preference} options found in ${type}`; //inner html tells the div tag what to show on the html page
+                return;
+             }
+                 let html = `
+        <h2>📅 Your Meal Plan</h2>
+        <p> <b>${type.toUpperCase()}</b>: ${meal.name} - Rs. ${meal.cost} <br> Calories=${meal.calories} <br> Ingredients=${meal.ingredients}</p>`;
+      
+      if (meal.cost > budget) {
+        html += `<p style="color:red;">⚠️ Over budget! (Your budget: Rs. ${budget})</p>`;
+      } else {
+        html += `<p style="color:green;">✅ Within budget! 🎉</p>`;
+      }
+      result.innerHTML=html;
+            }
+         
+
+    </script>   
+    </body>
+</html>
